@@ -46,10 +46,9 @@ LSTM_cell LSTM_cell_create(int units,int inputshape);
 void LSTM_cell_initalize(LSTM_cell cell,LSTM_initalize_struct* s);
 
 //运行静态LSTM,cell是存放LSTM单元的数组，单层LSTM即为单元地址，cells代表多层LSTM的层数,单层LSTM设为1，time_steps代表LSTM的输入序列个数
-//多层LSTM需要先合并
 //LSTM input shape (batchs,time_steps,inputshape)
 //LSTM output shape (batchs,outputshape)
-void LSTM_static(LSTM_cell* cell,int cells,int forget_bias,tensor* input,tensor* output);
+void LSTM_static(LSTM_cell* cell,int cells,int forget_bias,activation_function f,tensor* input,tensor* output);
 
 //销毁LSTM单元，释放alloc的内存
 void LSTM_cell_destroy(LSTM_cell cell);

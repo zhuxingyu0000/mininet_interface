@@ -85,7 +85,7 @@ void LSTM_cell_destroy(LSTM_cell cell)
 }
 
 //执行LSTM单元，input为输入一维数组
-void LSTM_call(LSTM_cell cell,float* input,float forget_bias)
+void LSTM_call(LSTM_cell cell,float* input,float forget_bias,activation_function f)
 {
     int i;
 
@@ -109,7 +109,8 @@ void LSTM_call(LSTM_cell cell,float* input,float forget_bias)
 
     MatMul(&(cell->input),&(cell->W_C),&(cell->ct));
     AddVector(&(cell->ct),&(cell->U_C),&(cell->ct));
-    tensortanh(&(cell->ct),&(cell->ct));
+    //tensortanh(&(cell->ct),&(cell->ct));
+    _activationfunction(f,&(cell->ct),&(cell->ct));
 
     //输出门
     //o(t)=sigma(Wo*input+bo)
@@ -123,11 +124,12 @@ void LSTM_call(LSTM_cell cell,float* input,float forget_bias)
 
     //更新输出状态
     //L(t)=o(t)*tanh(C(t))
-    tensortanh(&(cell->C),&(cell->L));
+    //tensortanh(&(cell->C),&(cell->L));
+    activation_function(f,&(cell->C),&(cell->L));
     for(i=0;i<cell->units;i++) cell->L.data[i]=cell->ot.data[i]*cell->L.data[i];
 }
 
-void LSTM_static(LSTM_cell* cell,int cells,int forget_bias,tensor* input,tensor* output)
+void LSTM_static(LSTM_cell* cell,int cells,int forget_bias,activation_function f,tensor* input,tensor* output)
 {
     int i,j,batchs,time_steps;
 
@@ -160,10 +162,10 @@ void LSTM_static(LSTM_cell* cell,int cells,int forget_bias,tensor* input,tensor*
         for(j=0;j<time_steps;j++)
         {
             float* data=input->data+input->dims[0]*j+input->dims[0]*input->dims[1]*i;
-            LSTM_call(cell[0],data,forget_bias);
+            LSTM_call(cell[0],data,forget_bias,f);
             for(k=1;k<cells;k++)
             {
-                LSTM_call(cell[k],cell[k-1]->L.data,forget_bias);
+                LSTM_call(cell[k],cell[k-1]->L.data,forget_bias,f);
             }
         }
         for(k=0;k<output->dims[0];k++)

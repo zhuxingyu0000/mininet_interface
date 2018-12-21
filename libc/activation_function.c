@@ -79,3 +79,22 @@ void sigmoid(tensor* in,tensor* out)
 		out->data[i]=1/(1+(float)exp(-(double)in->data[i]));
 	}
 }
+
+inline void _activationfunction(activation_function f,tensor* in,tensor* out)
+{
+	switch(f)
+	{
+		case _softmax:
+			softmax(in,out);
+			break;
+		case _tanh:
+			tensortanh(in,out);
+			break;
+		case _relu:
+			ReLu(in,out);
+			break;
+		case _sigmoid:
+			sigmoid(in,out);
+			break;
+	}
+}

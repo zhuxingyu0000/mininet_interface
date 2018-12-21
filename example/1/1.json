@@ -1,0 +1,11 @@
+{
+	"inputshape":[-1,784],
+	"nets":[{"id":"reshape","outshape":[-1,28,28,1]},
+		{"id":"CNN","activation":"relu","coresize":[5,5],"outsize":32,"pool":"maxpool2x2"},
+		{"id":"CNN","activation":"relu","coresize":[5,5],"outsize":64,"pool":"maxpool2x2"},
+		{"id":"reshape","outshape":[-1,3136]},
+		{"id":"Dense","activation":"softmax","outsize":10}],
+	"paths":{
+		"sourcefile":"../../libc/","outputfile":"./cfiles/"
+	}
+}

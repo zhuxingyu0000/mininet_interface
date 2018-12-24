@@ -125,7 +125,7 @@ void LSTM_call(LSTM_cell cell,float* input,float forget_bias,activation_function
     //更新输出状态
     //L(t)=o(t)*tanh(C(t))
     //tensortanh(&(cell->C),&(cell->L));
-    activation_function(f,&(cell->C),&(cell->L));
+    _activationfunction(f,&(cell->C),&(cell->L));
     for(i=0;i<cell->units;i++) cell->L.data[i]=cell->ot.data[i]*cell->L.data[i];
 }
 
